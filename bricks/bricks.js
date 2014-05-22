@@ -18,6 +18,20 @@ module.exports = {
    * @returns {*}
    */
   read: function(uri){
-    return require(global.__root + '/public' + uri);
+    var obj = require(this.getPath(uri, true));
+    obj.uri = uri;
+    return obj;
+  },
+  /**
+   * Путь на объект по его URI
+   * @param uri
+   * @param root
+   * @returns {string}
+   */
+  getPath: function(uri, root){
+    if (typeof  root === 'undefined') root = false;
+    var names = uri.split('/');
+    var last = names[names.length-1];
+    return (root? __DIR_PUBLIC : '') + uri + '/' + last + '.js';
   }
 };
