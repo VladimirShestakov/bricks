@@ -3,10 +3,13 @@
  */
 var ejs = require('ejs');
 var bricks = require(__DIR_BRICKS);
+var Vow = require('vow');
+var fs = require('fs');
 
 module.exports = {
   value:  'brick.ejs',
   uri: '/library/brick',
+  children: null,
 
   showChildren: function(){
     var filter = bricks.read(this.uri + '/filter');
@@ -26,5 +29,23 @@ module.exports = {
         console.log(err);
       }
     });
+  },
+
+  getChildren: function()
+  {
+    var def = Vow.defer();
+    var self = this;
+    if (this.children !== null){
+      def.resolve(self.children);
+    }else{
+      fs.readdir(__DIR_PUBLIC + this.uri, function(err, files){
+        self.children = [];
+        files.forEach(function(name){
+          self.children.push(name);
+        });
+        def.resolve(self.children);
+      });
+    }
+    return def.promise();
   }
 };

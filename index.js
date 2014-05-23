@@ -12,13 +12,17 @@ var http = require('http'),
 var port = 3000;
 var root = bricks.read('/interface/layout');
 
-http.createServer(connect()
-    .use(connect.favicon())
-    .use(connect.logger())
-    .use(connect.static('public'))
-    .use(function(req, res){
-        root.show(req, res);
-    })
-).listen(port);
+//http.createServer(connect()
+//    .use(connect.favicon())
+//    .use(connect.logger())
+//    .use(connect.static('public'))
+//    .use(function(req, res){
+//        root.show(req, res);
+//    })
+//).listen(port);
+//
+//console.log('Server running on http://127.0.0.1:' + port);
 
-console.log('Server running on http://127.0.0.1:' + port);
+root.getChildren().then(function(files){
+  console.log(files);
+});
