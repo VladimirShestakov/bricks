@@ -17,8 +17,14 @@ http.createServer(connect()
     .use(connect.logger())
     .use(connect.static('public'))
     .use(function(req, res){
-        root.show(req, res);
+        root.show(req, res).then(function(){
+            res.end();
+        });
     })
 ).listen(port);
 
 console.log('Server running on http://127.0.0.1:' + port);
+
+//root.getChildren().then(function(files){
+//  console.log(files);
+//});
