@@ -3,19 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <title>Фотки</title>
-    <link rel="stylesheet" href="/interface/layout/res/style/style.css"/>
-    <script src="/interface/layout/res/js/jquery-1.11.0.min.js"></script>
-    <script src="/interface/layout/res/js/like.js"></script>
+    <link rel="stylesheet" href="/interface/layout/_res/style/style.css"/>
+    <script src="/interface/layout/_res/js/jquery-1.11.0.min.js"></script>
+    <script src="/interface/layout/_res/js/like.js"></script>
 </head>
 <body>
     <div class="layout">
         <div class="layout__sidebar">
-            <= filter >
+            <%- filter %>
         </div>
         <div class="layout__main">
-            sorting
-            photos
-            pagenav
+            <%- sorting %>
+            <%- photos %>
+            <%- pagenav %>
         </div>
     </div>
 </body>

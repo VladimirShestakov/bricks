@@ -11,27 +11,36 @@ module.exports = {
     uri: '/library/brick',
     children: null,
 
-    showChildren: function () {
+    showChildren: function (req, res) {
         var def = Vow.defer();
-        this.getChildren().then(function(){
-            //Vow.all()
+        this.getChildren().then(function(children){
+            var pa = {};
+            Object.keys(children).map(function(i) {
+               pa[i] = children[i].show(req, res);
+            });
+            Vow.all(pa).then(function(renders){
+                def.resolve(renders);
+            });
         });
-        return def.promise;
+        return def.promise();
     },
 
     show: function (req, res) {
+        var self = this;
         var def = Vow.defer();
-        ejs.renderFile(__DIR_PUBLIC + this.uri + '/' + this.value, {}/*this.showChildren()*/, function (err, result) {
-            if (!err) {
-                res.writeHead(200, {'content-type': 'text/html'});
-                res.write(result);
-                def.resolve();
-            } else {
-                res.writeHead(500, {'content-type': 'text/html'});
-                res.write('Ошибка');
-                console.log(err);
-                def.resolve();
-            }
+        this.showChildren(req, res).then(function(values){
+            ejs..renderFile(__DIR_PUBLIC + self.uri + '/' + self.value, values, function (err, result) {
+                if (!err) {
+                    res.writeHead(200, {'content-type': 'text/html'});
+                    //res.write(result);
+                    def.resolve(result);
+                } else {
+                    res.writeHead(500, {'content-type': 'text/html'});
+//                    res.write('Ошибка');
+                    console.log(err);
+                    def.resolve('Ошибка');
+                }
+            });
         });
         return def.promise();
     },
@@ -43,14 +52,16 @@ module.exports = {
             def.resolve(self.children);
         } else {
             fs.readdir(__DIR_PUBLIC + this.uri, function (err, files) {
-                self.children = [];
+                self.children = {};
                 files.forEach(function (name) {
                     var obj;
                     if (obj = bricks.read(self.uri + '/' + name)){
-                        self.children.push(obj);
+                        self.children[name] =  obj;
                     }
                 });
                 def.resolve(self.children);
+
+                def.reject(err);
             });
         }
         return def.promise();
