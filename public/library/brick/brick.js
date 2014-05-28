@@ -29,7 +29,7 @@ module.exports = {
         var self = this;
         var def = Vow.defer();
         this.showChildren(req, res).then(function(values){
-            ejs..renderFile(__DIR_PUBLIC + self.uri + '/' + self.value, values, function (err, result) {
+            ejs.renderFile(__DIR_PUBLIC + self.uri + '/' + self.value, values, function (err, result) {
                 if (!err) {
                     res.writeHead(200, {'content-type': 'text/html'});
                     //res.write(result);
